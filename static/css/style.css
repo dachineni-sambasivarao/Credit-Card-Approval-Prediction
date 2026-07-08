@@ -1,0 +1,465 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-primary: #0b0f19;
+    --bg-secondary: #111827;
+    --card-bg: rgba(20, 26, 42, 0.75);
+    --card-border: rgba(255, 255, 255, 0.08);
+    
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.45);
+    --primary-hover: #4f46e5;
+    
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.4);
+    --success-bg: rgba(16, 185, 129, 0.1);
+    
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.4);
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    
+    --text-primary: #f3f4f6;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    
+    --input-bg: rgba(15, 23, 42, 0.85);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-focus: #6366f1;
+    
+    --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --border-radius-lg: 16px;
+    --border-radius-md: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background: radial-gradient(circle at 50% 0%, #1e1e38 0%, var(--bg-primary) 70%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+}
+
+/* Background Glowing Accents */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--primary);
+    filter: blur(150px);
+    opacity: 0.15;
+    z-index: -1;
+}
+
+body::before {
+    top: 10%;
+    left: 10%;
+}
+
+body::after {
+    bottom: 10%;
+    right: 10%;
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    padding: 40px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 100px rgba(99, 102, 241, 0.05);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.header-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: inline-block;
+    background: linear-gradient(135deg, #a5b4fc 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    animation: pulse 3s infinite alternate;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #ffffff, #c7d2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* Sections Grid Layout */
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.form-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 15px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: var(--border-radius-md);
+    position: relative;
+}
+
+.form-section:hover {
+    border-color: rgba(99, 102, 241, 0.15);
+    background: rgba(255, 255, 255, 0.02);
+    transition: var(--transition-smooth);
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    transition: var(--transition-smooth);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-primary);
+    border-radius: var(--border-radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+    outline: none;
+    appearance: none; /* remove default arrow for select */
+    -webkit-appearance: none;
+}
+
+select {
+    padding-right: 40px; /* space for arrow icon */
+    cursor: pointer;
+}
+
+/* Custom Dropdown Arrow */
+.input-wrapper::after {
+    content: '▾';
+    font-size: 12px;
+    color: var(--text-secondary);
+    position: absolute;
+    right: 15px;
+    pointer-events: none;
+    display: none; /* only show on select fields */
+}
+
+.select-wrapper::after {
+    display: block !important;
+}
+
+input:focus, select:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+    background: var(--bg-secondary);
+}
+
+input:focus + label, select:focus + label {
+    color: var(--primary);
+}
+
+/* Submit Section */
+.submit-section {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    width: auto;
+    min-width: 220px;
+    padding: 15px 40px;
+    font-size: 1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+    border: none;
+    border-radius: var(--border-radius-md);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--primary-glow);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #4338ca 100%);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Result Screen Styles */
+.result-container {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    padding: 40px;
+    text-align: center;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.result-card {
+    border-radius: var(--border-radius-md);
+    padding: 30px;
+    margin: 30px 0;
+    border: 1px solid transparent;
+    transition: var(--transition-smooth);
+}
+
+/* Status variants applied dynamically by frontend script or generated output */
+.result-card.status-approved {
+    background: var(--success-bg);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+}
+
+.result-card.status-rejected {
+    background: var(--danger-bg);
+    border-color: rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+}
+
+.result-card.status-error {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.25);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+}
+
+.result-status-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.status-approved .result-status-icon {
+    background: var(--success);
+    color: var(--bg-primary);
+    box-shadow: 0 0 15px var(--success-glow);
+    animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.status-rejected .result-status-icon {
+    background: var(--danger);
+    color: var(--text-primary);
+    box-shadow: 0 0 15px var(--danger-glow);
+    animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.status-error .result-status-icon {
+    background: #f59e0b;
+    color: var(--bg-primary);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.result-card h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+.status-approved h2 {
+    color: var(--success);
+}
+
+.status-rejected h2 {
+    color: var(--danger);
+}
+
+.status-error h2 {
+    color: #f59e0b;
+}
+
+.result-message {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.back-btn-wrapper {
+    margin-top: 20px;
+}
+
+.back-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-weight: 600;
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-smooth);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+    .container {
+        padding: 25px 15px;
+    }
+    .form-section {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    .section-title, .full-width, .submit-section {
+        grid-column: span 1;
+    }
+    h1 {
+        font-size: 1.7rem;
+    }
+}

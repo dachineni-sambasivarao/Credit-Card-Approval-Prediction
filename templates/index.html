@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Approval Prediction Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-icon">💳</div>
+        <h1>Credit Card Approval Predictor</h1>
+        <p class="subtitle">Enter applicant demographics and financial history to estimate approval probability</p>
+    </header>
+
+    <form action="/predict" method="POST" id="prediction-form">
+        <!-- Hidden input for Mobile Phone (Always 1 in the original form) -->
+        <input type="hidden" name="FLAG_MOBIL" value="1">
+
+        <div class="form-grid">
+            
+            <!-- Section 1: Demographics & Personal Profile -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>👤</span> Personal Profile
+                </div>
+                
+                <div class="input-box select-wrapper">
+                    <label>Gender</label>
+                    <select name="CODE_GENDER" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="0">Female</option>
+                        <option value="1">Male</option>
+                    </select>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Family Status</label>
+                    <select name="NAME_FAMILY_STATUS" required>
+                        <option value="" disabled selected>Select Status</option>
+                        <option value="0">0 (Civil Marriage)</option>
+                        <option value="1">1 (Married)</option>
+                        <option value="2">2 (Separated)</option>
+                        <option value="3">3 (Single / Not Married)</option>
+                        <option value="4">4 (Widow)</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Children Count</label>
+                    <input type="number" name="CNT_CHILDREN" min="0" max="20" placeholder="0" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Family Members</label>
+                    <input type="number" step="0.1" name="CNT_FAM_MEMBERS" min="1" max="25" placeholder="1" required>
+                </div>
+
+                <!-- Friendly Age Input -->
+                <div class="input-box friendly-input full-width">
+                    <label>Age (Years)</label>
+                    <input type="number" id="friendly_age" min="18" max="100" placeholder="e.g. 35" required>
+                </div>
+
+                <!-- Raw Days Birth Input (hidden by default) -->
+                <div class="input-box raw-input full-width" style="display: none;">
+                    <label>Days Since Birth (Negative integer)</label>
+                    <input type="number" id="raw_days_birth" placeholder="e.g. -12000">
+                </div>
+            </div>
+
+            <!-- Section 2: Financial & Employment Profile -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>💼</span> Financial & Professional Profile
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Owns Car</label>
+                    <select name="FLAG_OWN_CAR" required>
+                        <option value="" disabled selected>Select Option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Owns Real Estate</label>
+                    <select name="FLAG_OWN_REALTY" required>
+                        <option value="" disabled selected>Select Option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-box full-width">
+                    <label>Annual Income (USD)</label>
+                    <input type="number" name="AMT_INCOME_TOTAL" min="0" placeholder="e.g. 50000" required>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Income Type</label>
+                    <select name="NAME_INCOME_TYPE" required>
+                        <option value="" disabled selected>Select Type</option>
+                        <option value="0">0 (Working)</option>
+                        <option value="1">1 (Commercial Associate)</option>
+                        <option value="2">2 (Pensioner)</option>
+                        <option value="3">3 (State Servant)</option>
+                        <option value="4">4 (Student)</option>
+                    </select>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Education Level</label>
+                    <select name="NAME_EDUCATION_TYPE" required>
+                        <option value="" disabled selected>Select Education</option>
+                        <option value="0">0 (Academic Degree)</option>
+                        <option value="1">1 (Higher Education)</option>
+                        <option value="2">2 (Incomplete Higher)</option>
+                        <option value="3">3 (Lower Secondary)</option>
+                        <option value="4">4 (Secondary / Special)</option>
+                    </select>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Housing Type</label>
+                    <select name="NAME_HOUSING_TYPE" required>
+                        <option value="" disabled selected>Select Housing</option>
+                        <option value="0">0 (Co-op Apartment)</option>
+                        <option value="1">1 (House / Apartment)</option>
+                        <option value="2">2 (Municipal Apartment)</option>
+                        <option value="3">3 (Office Apartment)</option>
+                        <option value="4">4 (Rented Apartment)</option>
+                        <option value="5">5 (With Parents)</option>
+                    </select>
+                </div>
+
+                <div class="input-box select-wrapper">
+                    <label>Occupation Type</label>
+                    <select name="OCCUPATION_TYPE" required>
+                        <option value="" disabled selected>Select Occupation</option>
+                        <option value="0">0 (Accountants)</option>
+                        <option value="1">1 (Cleaning Staff)</option>
+                        <option value="2">2 (Cooking Staff)</option>
+                        <option value="3">3 (Core Staff)</option>
+                        <option value="4">4 (Drivers)</option>
+                        <option value="5">5 (HR Staff)</option>
+                        <option value="6">6 (High Skill Tech)</option>
+                        <option value="7">7 (IT Staff)</option>
+                        <option value="8">8 (Laborers)</option>
+                        <option value="9">9 (Low-skill Laborers)</option>
+                        <option value="10">10 (Managers)</option>
+                        <option value="11">11 (Medicine Staff)</option>
+                        <option value="12">12 (Private Service)</option>
+                        <option value="13">13 (Realty Agents)</option>
+                        <option value="14">14 (Sales Staff)</option>
+                        <option value="15">15 (Secretaries)</option>
+                        <option value="16">16 (Security Staff)</option>
+                        <option value="17">17 (Waiters/Barmen)</option>
+                    </select>
+                </div>
+
+                <!-- Friendly Employment Input -->
+                <div class="input-box friendly-input full-width">
+                    <label>Employment Experience (Years)</label>
+                    <input type="number" id="friendly_exp" min="0" max="80" placeholder="e.g. 5 (Enter 0 if Unemployed)" required>
+                </div>
+
+                <!-- Raw Days Employed Input (hidden by default) -->
+                <div class="input-box raw-input full-width" style="display: none;">
+                    <label>Days Employed (Negative integer, or 365243)</label>
+                    <input type="number" id="raw_days_employed" placeholder="e.g. -1800">
+                </div>
+            </div>
+
+            <!-- Section 3: Contact Channels & Control Options (Spans Full Width on desktop) -->
+            <div class="form-section full-width" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="section-title" style="margin-bottom: 5px;">
+                    <span>📞</span> Contact Channels & Tools
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%;">
+                    <div class="input-box select-wrapper">
+                        <label>Work Phone Available</label>
+                        <select name="FLAG_WORK_PHONE" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box select-wrapper">
+                        <label>Landline Phone Available</label>
+                        <select name="FLAG_PHONE" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box select-wrapper">
+                        <label>Email Address Provided</label>
+                        <select name="FLAG_EMAIL" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+                        Need to test raw model parameters? Toggle input format:
+                    </span>
+                    <button type="button" id="toggle_mode_btn" style="margin-top: 0; padding: 6px 12px; font-size: 0.75rem; min-width: auto; width: auto; background: rgba(99, 102, 241, 0.1); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3);">
+                        Switch to Raw Days Mode
+                    </button>
+                </div>
+            </div>
+
+            <!-- Real fields to be submitted for Birth Days and Employed Days in Friendly Mode -->
+            <input type="hidden" id="hidden_days_birth" name="DAYS_BIRTH">
+            <input type="hidden" id="hidden_days_employed" name="DAYS_EMPLOYED">
+
+            <div class="submit-section">
+                <button type="submit">Analyze Application</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<script>
+    const toggleBtn = document.getElementById('toggle_mode_btn');
+    const friendlyInputs = document.querySelectorAll('.friendly-input');
+    const rawInputs = document.querySelectorAll('.raw-input');
+    
+    const friendlyAge = document.getElementById('friendly_age');
+    const friendlyExp = document.getElementById('friendly_exp');
+    const rawDaysBirth = document.getElementById('raw_days_birth');
+    const rawDaysEmployed = document.getElementById('raw_days_employed');
+    
+    const hiddenDaysBirth = document.getElementById('hidden_days_birth');
+    const hiddenDaysEmployed = document.getElementById('hidden_days_employed');
+    
+    let isRawMode = false;
+
+    // Set initial configuration
+    hiddenDaysBirth.setAttribute('name', 'DAYS_BIRTH');
+    hiddenDaysEmployed.setAttribute('name', 'DAYS_EMPLOYED');
+
+    toggleBtn.addEventListener('click', () => {
+        isRawMode = !isRawMode;
+        if (isRawMode) {
+            // Raw days mode
+            toggleBtn.textContent = 'Switch to Friendly Mode';
+            friendlyInputs.forEach(el => el.style.display = 'none');
+            rawInputs.forEach(el => el.style.display = 'flex');
+            
+            // Remove required from friendly inputs and add to raw inputs
+            friendlyAge.removeAttribute('required');
+            friendlyExp.removeAttribute('required');
+            rawDaysBirth.setAttribute('required', '');
+            rawDaysEmployed.setAttribute('required', '');
+            
+            // Swap name attributes so Flask maps raw inputs directly
+            rawDaysBirth.setAttribute('name', 'DAYS_BIRTH');
+            rawDaysEmployed.setAttribute('name', 'DAYS_EMPLOYED');
+            hiddenDaysBirth.removeAttribute('name');
+            hiddenDaysEmployed.removeAttribute('name');
+        } else {
+            // User-friendly years mode
+            toggleBtn.textContent = 'Switch to Raw Days Mode';
+            friendlyInputs.forEach(el => el.style.display = 'flex');
+            rawInputs.forEach(el => el.style.display = 'none');
+            
+            // Add required to friendly inputs and remove from raw inputs
+            friendlyAge.setAttribute('required', '');
+            friendlyExp.setAttribute('required', '');
+            rawDaysBirth.removeAttribute('required');
+            rawDaysEmployed.removeAttribute('required');
+            
+            // Swap name attributes back to hidden inputs
+            hiddenDaysBirth.setAttribute('name', 'DAYS_BIRTH');
+            hiddenDaysEmployed.setAttribute('name', 'DAYS_EMPLOYED');
+            rawDaysBirth.removeAttribute('name');
+            rawDaysEmployed.removeAttribute('name');
+        }
+    });
+
+    document.getElementById('prediction-form').addEventListener('submit', (e) => {
+        if (!isRawMode) {
+            // Perform calculation for Friendly Mode before submit
+            const ageYears = parseFloat(friendlyAge.value);
+            const expYears = parseFloat(friendlyExp.value);
+            
+            // Calculate DAYS_BIRTH (negative days representing age)
+            const daysBirth = -Math.round(ageYears * 365.25);
+            hiddenDaysBirth.value = daysBirth;
+            
+            // Calculate DAYS_EMPLOYED (negative days representing work duration)
+            // Note: In Kaggle dataset, if unemployed/retired, value is 365243
+            if (expYears === 0) {
+                hiddenDaysEmployed.value = 365243;
+            } else {
+                const daysEmployed = -Math.round(expYears * 365.25);
+                hiddenDaysEmployed.value = daysEmployed;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
