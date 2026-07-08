@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="result-container">
+    <h1>Prediction Result</h1>
+
+    <!-- Result Card that will be styled dynamically -->
+    <div class="result-card" id="result-card">
+        <div class="result-status-icon" id="status-icon">?</div>
+        <h2 id="prediction-text">{{ prediction }}</h2>
+        <p class="result-message" id="result-message">
+            Analyzing decision tree thresholds and credit risk factors...
+        </p>
+    </div>
+
+    <div class="back-btn-wrapper">
+        <a href="/" class="back-btn">
+            ← Analyze Another Applicant
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const card = document.getElementById('result-card');
+        const icon = document.getElementById('status-icon');
+        const textElement = document.getElementById('prediction-text');
+        const message = document.getElementById('result-message');
+        
+        const prediction = textElement.textContent.trim().toLowerCase();
+        const isError = prediction.includes('error');
+
+        if (isError) {
+            card.classList.add('status-error');
+            icon.textContent = '⚠';
+            message.textContent = 'Something went wrong while processing this application. Please check the server logs and try again.';
+            return;
+        }
+
+        // Determine outcome: 1 = Approved, 0 = Rejected, or textual representations
+        const isApproved = prediction.includes('approve') ||
+                           prediction === '1' ||
+                           prediction.includes('success');
+
+        if (isApproved) {
+            card.classList.add('status-approved');
+            icon.textContent = '✓';
+            message.textContent = 'Based on the applicant\'s credit profile, employment history, and financial metrics, the application is likely to be APPROVED. Low credit risk detected.';
+        } else {
+            card.classList.add('status-rejected');
+            icon.textContent = '✗';
+            message.textContent = 'Based on the applicant\'s credit history, income ratios, and demographic variables, the application is likely to be REJECTED. High risk variance detected.';
+        }
+    });
+</script>
+
+</body>
+</html>
